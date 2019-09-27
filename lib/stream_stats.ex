@@ -15,7 +15,7 @@ defmodule StreamStats do
   @type m2() :: number()
 
   @doc """
-  Implemented as Welford's Online algorithm
+  Adds a value to the aggregated stats tuple. Implemented as Welford's Online algorithm.
 
   https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_Online_algorithm
   """
@@ -33,14 +33,14 @@ defmodule StreamStats do
   end
 
   @doc """
-  Implemented as Chan's Parallel Algorithm
+  Merges two stats tuples. Implemented as Chan's Parallel Algorithm
 
   https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Parallel_algorithm
   """
   @spec combine_stats(nil | t(), t()) :: t()
 
-  def combine_stats({_, _, _} = a, nil), do: a
-  def combine_stats(nil, {_, _, _} = b), do: b
+  def combine_stats({_, _, _} = stats_a, nil), do: stats_a
+  def combine_stats(nil, {_, _, _} = stats_b), do: stats_b
 
   def combine_stats({count_a, mean_a, m2_a}, {count_b, mean_b, m2_b}) do
     count = count_a + count_b
@@ -54,17 +54,29 @@ defmodule StreamStats do
     {count, mean, m2}
   end
 
+  @doc """
+  Aggregates the values in a list to a stats tuple.
+  """
   @spec reduce(Enum.t(), t() | nil) :: any()
   def reduce(values, stats \\ nil) do
     Enum.reduce(values, stats, &combine/2)
   end
 
+
+  @doc """
+  First argument can be a number or stats tuple.
+  """
   @spec combine(number() | t(), t()) :: t()
   def combine({_, _, _} = stats_a, stats_b), do: combine_stats(stats_a, stats_b)
   def combine(value, stats), do: push_value(value, stats)
 
+  @doc """
+  Calculates the variance using a stats tuple.
+  """
   @spec variance(t()) :: number()
-  def variance({count, _mean, m2}) do
+  def variance(stats) do
+    {count, _mean, m2} = stats
+
     if count <= 1 do
       0
     else
@@ -72,6 +84,9 @@ defmodule StreamStats do
     end
   end
 
+  @doc """
+  Calculates the standard deviation using a stats tuple.
+  """
   @spec standard_deviation(t()) :: number()
   def standard_deviation(stats) do
     :math.sqrt(variance(stats))
