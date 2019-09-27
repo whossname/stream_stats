@@ -64,6 +64,8 @@ defmodule StreamStats do
 
 
   @doc """
+  Aggregates number or stats tuple into a stats tuple.
+
   First argument can be a number or stats tuple.
   """
   @spec combine(number() | t(), t()) :: t()
