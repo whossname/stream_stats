@@ -33,7 +33,7 @@ defmodule StreamStats do
   end
 
   @doc """
-  Merges two stats tuples. Implemented as Chan's Parallel Algorithm
+  Merges two stats tuples. Implemented as Chan's Parallel Algorithm.
 
   https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Parallel_algorithm
   """
@@ -64,7 +64,7 @@ defmodule StreamStats do
 
 
   @doc """
-  Aggregates number or stats tuple into a stats tuple.
+  Aggregates a number or stats tuple into a stats tuple.
 
   First argument can be a number or stats tuple.
   """
