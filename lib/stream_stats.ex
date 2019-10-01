@@ -20,7 +20,7 @@ defmodule StreamStats do
   https://en.wikipedia.org/wiki/Algorithms_for_calculating_variance#Welford's_Online_algorithm
   """
   @spec push_value(number(), nil | t()) :: t()
-  def push_value(value, nil), do: {1, value, 0}
+  def push_value(value, nil), do: {1, value, 0.0}
 
   def push_value(value, {prev_count, prev_mean, prev_m2}) do
     count = prev_count + 1
@@ -80,7 +80,7 @@ defmodule StreamStats do
     {count, _mean, m2} = stats
 
     if count <= 1 do
-      0
+      0.0
     else
       m2 / (count - 1.0)
     end

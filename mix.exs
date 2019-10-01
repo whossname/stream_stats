@@ -1,6 +1,6 @@
 defmodule StreamStats.MixProject do
   use Mix.Project
-  @version "0.1.0"
+  @version "0.1.1"
   @url "https://github.com/whossname/stream_stats"
   @maintainers ["Tyson Buzza"]
 
